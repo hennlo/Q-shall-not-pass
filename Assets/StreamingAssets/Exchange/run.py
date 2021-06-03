@@ -6,8 +6,9 @@ sys.path.append(sys.path[0]+'/Data/game')
 
 try:
 
-    from game import qisge, next_frame
-
+    
+    from game import qisge, next_frame,initialize_game
+    initialize_game()
     input = qisge.update()
     frame = 0
     t0 = time.time()
