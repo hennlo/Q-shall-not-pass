@@ -99,7 +99,7 @@ class Camera():
 
 
 class Sprite():
-    def __init__(self,image_id,x=0,y=0,z=0,size=1,angle=0,flip_h=0,flip_v=0):
+    def __init__(self,image_id,x=0,y=0,z=0,size=1,height=1,width=1,angle=0,flip_h=0,flip_v=0):
         
         self.sprite_id = len(_engine.sprite_changes)
         _engine.sprite_changes[self.sprite_id] = {}
@@ -111,6 +111,8 @@ class Sprite():
         self.flip_h = flip_h
         self.flip_v = flip_v
         self.size = size
+        self.height = height
+        self.width = width
         self.angle = angle
         
     def __setattr__(self,name,val):

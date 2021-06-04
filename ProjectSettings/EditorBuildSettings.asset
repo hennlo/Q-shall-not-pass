@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/QisgeMain.unity
     guid: 9cbdc586c3169d349adc4671e98ab5d7
+  - enabled: 1
+    path: Assets/QisgeRuntime.unity
+    guid: 8b008af411da0a0468179a297810fed0
   m_configObjects: {}

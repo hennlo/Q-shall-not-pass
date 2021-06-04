@@ -27,6 +27,10 @@ public enum KeyPress {
     action2, //right action button
     action3, //bottom action button
     action4, //left action button
+    submit, //return button
+    x,
+    z,
+    h
 }
 
 [System.Serializable]

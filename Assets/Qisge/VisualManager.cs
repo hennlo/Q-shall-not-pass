@@ -84,7 +84,7 @@ public class VisualManager : MonoBehaviour {
         UsedSprites.Add(imageID, sprite);
 
         if (spriteReferences.ContainsKey(imageID)) {
-            Debug.LogError("iamge ID already used:" + imageID);
+            Debug.LogError("image ID already used:" + imageID);
         } else {
             spriteReferences.Add(imageID, new List<int>());
         }
@@ -187,13 +187,19 @@ public class VisualManager : MonoBehaviour {
 
         Vector3 pos = new Vector3(position.x, position.y, -position.z);
         Quaternion rot = Quaternion.Euler(0, 0, position.angle);
-        float size =position.size;
+        float size = position.size;
+        float height = position.height;
+        float width = position.height;
         Vector3 sizeVec = new Vector3(size, size, size);
 
         SpriteRenderer renderer = SpritesInScene[position.sprite_id];
         renderer.transform.position = pos;
         renderer.transform.rotation = rot;
         renderer.transform.localScale = sizeVec;
+        //renderer.drawMode = SpriteDrawMode.Tiled;
+        //Vector2 sizeDep = new Vector2(5, 1);
+        //renderer.size = sizeDep;
+        //renderer.size.width = width;
 
         Positions[position.sprite_id] = position;
 

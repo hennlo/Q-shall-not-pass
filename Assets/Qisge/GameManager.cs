@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour {
                     string data = reader.ReadToEnd();
                     //string data = File.ReadAllText(SpriteFilePath);
                     //try {
+                    
                     dataReader.SetLength(0);
                     dataReader.Close();
                     UpdateFile update = JsonUtility.FromJson<UpdateFile>(data);

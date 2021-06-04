@@ -43,6 +43,10 @@ public class SpritePosition {
 
     public float size = -1;
 
+    //Custom Modification
+    public float height = -1;
+    public float width = -1;
+
     public float angle = -1;
 
     public bool flip_v = false;

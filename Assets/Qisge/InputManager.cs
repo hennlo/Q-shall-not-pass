@@ -68,6 +68,26 @@ public class InputManager : MonoBehaviour
             PressHappened(KeyPress.action1);
         }
 
+
+        // Modifications to original 
+        if (Input.GetButtonDown("Submit")) {
+            PressHappened(KeyPress.submit);
+        }
+
+        if (Input.GetButtonDown("X")) {
+            PressHappened(KeyPress.x);
+        }
+
+        if (Input.GetButtonDown("H")) {
+            PressHappened(KeyPress.h);
+        }
+
+        if (Input.GetButtonDown("Z")) {
+            PressHappened(KeyPress.z);
+        }
+
+
+
     }
 
     public void PressHappened(KeyPress press) {
