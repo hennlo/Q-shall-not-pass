@@ -104,8 +104,9 @@ class Passage():
         self.x, self.y, self.orientation, self.side = self.replace_passage()
         
         # Red Square
-        self.sprite = qisge.Sprite(11, self.x, self.y, size = 0.5) 
+        self.sprite = qisge.Sprite(11, self.x, self.y, size = 1) 
         self.z = 1
+        self.sprite.z = 0.9
         
 
         
@@ -113,27 +114,32 @@ class Passage():
 
     def replace_passage(self):
     
-        # 1 = vertically , 0 horizontally
-        orientation = random.randint(0,2)
-        
-        # 0 = left/bottom , 1 = right/top 
-        side = random.randint(0,2)
-        
+        valid_pos = False
 
-        if orientation == 1:
-            # If side is 0 (left)
-            if side == 0:
-                x = 0
+        while not valid_pos:
+             
+            # 1 = vertically , 0 horizontally
+            orientation = random.randint(0,2)
+        
+            # 0 = left/bottom , 1 = right/top 
+            side = random.randint(0,2)
+            
+            if orientation == 1:
+                # If side is 0 (left)
+                if side == 0:
+                    x = 0
+                else:
+                    x = 27
+                y = random.randint(0,14)
             else:
-                x = 27
-            y = random.randint(0,15)
-        else:
-            x = random.randint(0,27)
-            # If side is 0 (bottom) otherwise top of screen
-            if side == 0:
-                y = 0
-            else:
-                y = 15
+                x = random.randint(0,26)
+                # If side is 0 (bottom) otherwise twaop of screen
+                if side == 0:
+                    y = 0
+                else:
+                    y = 15
+
+            valid_pos = not collide(x,y)
 
         #TODO Check if gate is even accessible
 
@@ -151,6 +157,7 @@ class Player():
         self.x, self.y = get_character_start_position()
         self.sprite = qisge.Sprite(img, self.x, self.y,size = 0.5) 
         self.z = 0
+        self.sprite.z = 1
         self.speed = speed
         self.direction = 1
 
@@ -382,6 +389,14 @@ def next_frame(input):
 
     if 4 in input['key_presses']:
         toggle_textbox()
+        pressed=True
+
+
+
+    ##Rebuilds map
+    if 8 in input['key_presses']:
+        initialize_game()
+        pressed=True
 
     if 9 in input['key_presses']:
         pressed=True
@@ -411,7 +426,7 @@ def next_frame(input):
             loading.text += "\nPassage  " + str(passage.x) + " " + str(passage.y)
 
     
-
+    
         # Redraw tiles
         #for dx in range(28):
         #    for dy in range(16):
