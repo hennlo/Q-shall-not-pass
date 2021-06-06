@@ -69,11 +69,12 @@ current_level = 0
 # determines whether there is a collision with the map when the player is at a given position
 def collide(new_x,new_y):
     
+    
     global collision_map
     #check if new coordinates are within blocked pixel
     eps = 0.3
     for xx,yy in [(eps,eps),(eps,1-eps),(1-eps,eps),(1-eps,1-eps)]:
-        if collision_map[(int)(new_x+xx)][(int)(new_y+yy)]:
+        if collision_map[(int)(new_y+yy)][(int)(new_x+xx)]:
             return True
 
     #TODO screen border should collide ONLY gate should be passthrough
@@ -138,10 +139,14 @@ class Passage():
                 else:
                     y = 15
 
-            valid_pos = not collide(x,y)
+            ## check valid_pos if length is not out of range instead of collide
+            #valid_pos = not collide(x,y)
+            valid_pos = True
 
         #TODO Check if gate is even accessible
 
+    	
+        collision_map[y][x] = False
         return x, y, orientation, side
 
     def draw_on_map(self):
@@ -154,7 +159,7 @@ class Passage():
 
 
 class Player():
-    def __init__(self,img,speed=0.25):
+    def __init__(self,img,speed=0.25,health=10):
 
         self.x, self.y = get_character_start_position()
         self.sprite = qisge.Sprite(img, self.x, self.y,size = 0.5) 
@@ -162,6 +167,8 @@ class Player():
         self.sprite.z = 1
         self.speed = speed
         self.direction = 1
+
+        self.health = health
 
         
 
@@ -271,23 +278,32 @@ pos_x = 0
 pos_y = 0
 sprite = {}
 
-collision_map =  [[False for x in range(16)] for y in range(28 )] 
+collision_map =  [[False for _ in range(28)] for _ in range(16)] 
+
 
 def draw_map():
 
     
-
     global collision_map    
 
     # Draw complete map
     for dx in range(28):
         for dy in range(16):
-            image_id = get_image_id(pos_x+dx, pos_y+dy)
-            if ( image_id == 6):
-                # collision object
-                collision_map[dx][dy] = True
+            
+            # artificially place border around screenedge
+            if ( dx == 0 or dx == 27 or dy == 0 or dy == 15 ):
+                #backrock
+                image_id = 7
+                collision_map[dy][dx] = True
+                #sprite[dx,dy] = qisge.Sprite(image_id, x=dx,y=dy,z=0.7)
+                
             else:
-                collision_map[dx][dy] = False
+                image_id = get_image_id(pos_x+dx, pos_y+dy)
+                if ( image_id == 6 ):
+                # collision object
+                    collision_map[dy][dx] = True
+                else:
+                    collision_map[dy][dx] = False
             sprite[dx,dy] = qisge.Sprite(image_id, x=dx,y=dy,z=0)
 
     
@@ -316,8 +332,8 @@ def initialize_game():
     loading.width = 16
     qisge.update()
     
-    draw_map()
-
+    #draw_map()
+    
     loading.width = 0
     qisge.update()
 
@@ -326,8 +342,8 @@ def initialize_game():
     loading.width = 16
     qisge.update()
 
-    initialize_objects
-
+    #initialize_objects()
+    
 
     loading.width = 0
     
@@ -356,6 +372,19 @@ def next_level():
     qisge.update()
 
 
+def check_level_condition():
+    if ( dx == 0 or dx == 27 or dy == 0 or dy == 15 ):
+        print()
+
+    
+
+def restart_level():
+    # Decrease health
+    player.health-=1
+
+    global current_level
+    current_level-=1
+    next_level()
 
 
 
@@ -379,7 +408,6 @@ def get_image_id(x,y):
     ket = simulate(qc,get='statevector')
     p = ket[0][0]**2 + ket[0][1]**2
 
-   
     image_id = int( round(p*(terrain_types-1)) )
 
     return image_id
@@ -414,7 +442,6 @@ def next_frame(input):
         dir_x += 1
         pressed=True
         
-
     if 2 in input['key_presses']:
         pos_y -= 1
         dir_y -= 1
@@ -435,7 +462,7 @@ def next_frame(input):
     ##Rebuilds map
     if 8 in input['key_presses']:
         #initialize_game()
-        next_level()
+        restart_level()
         pressed=True
 
     if 9 in input['key_presses']:
@@ -481,7 +508,7 @@ def next_frame(input):
 
     ##############
     #
-    # Idea: Maybe created 2 qubits in graph, one is the playery the other one is 
+    # Idea: Maybe created 2 qubits in graph, one is the player the other one is 
     # the gate. They should have a relation between them to interact
     #
     ###############
