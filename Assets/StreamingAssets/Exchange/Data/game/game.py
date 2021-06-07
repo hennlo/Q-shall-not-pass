@@ -98,6 +98,30 @@ def get_character_start_position():
     return x,y
 
 
+class Snack():
+
+    def __init__(self):
+        self.x,self.y = get_character_start_position()
+        self.sprite = qisge.Sprite(19, self.x, self.y, z=0.9,size = 0.5) 
+
+#number of snacks are level progress
+def draw_snacks():
+
+    #draw snacks based on current_level
+    global current_level
+    snacks = [current_level]
+    for i in range (0,current_level):
+        snacks[i] = Snack()
+            
+            
+
+
+
+
+
+#The initial idea was to use the creation of specific characters to get proportional characters but this procedural
+# generation can of course be applied to levels and the continous generation of new puzzles and workloads which get more complicated
+# once you progress in levels 
 class Passage():
     
     # Get changes position at the border of the screen
@@ -120,16 +144,16 @@ class Passage():
         
         d = math.sqrt(pos_x**2+pos_y**2)
         f = [ s*math.cos(s*d*math.pi/100) for s in seed]
-        tx = (f[0]*pos_x + f[1]*pos_y)*math.pi/7
-        ty = (f[2]*pos_x - f[3]*pos_y)*math.pi/7
-        tz = (f[4]*(pos_x+pos_y) + f[5]*(pos_x-pos_y))*math.pi/7
+        tx = (f[0]*pos_x + f[1]*pos_y)*math.pi/2
+        ty = (f[2]*pos_x - f[3]*pos_y)*math.pi/2
+        tz = (f[4]*(pos_x+pos_y) + f[5]*(pos_x-pos_y))*math.pi/2
 
         theta = math.pi/math.sqrt(2)
 
         global qubits
-        qubits.qc.rx(tx,0)
-        qubits.qc.rz(tz,0)
-        qubits.qc.ry(ty,0)
+        qubits.qc.rx(tx,1)
+        qubits.qc.rz(tz,1)
+        qubits.qc.ry(ty,1)
 
         
 
@@ -141,9 +165,9 @@ class Passage():
         self.rotation = passage_properties.get('Y')**2
 
         #0.5 only for display reasons, the calculations are done using the expectation values
-        self.pointer.size = self.height +0.5
-        self.pointer.height = self.height +0.5
-        self.pointer.width = self.width +0.5
+        self.pointer.size = self.height + 0.4
+        self.pointer.height = self.height + 0.4
+        self.pointer.width = self.width + 0.4
         self.pointer.angle = self.rotation*360
 
 
@@ -442,6 +466,7 @@ def next_level():
 
     draw_map()
     initialize_objects()
+    draw_snacks()
 
     levelScreen = qisge.Text('Level: '+str(current_level) +"\n\nHealth: "+ str(health), 16,2,font_size=22)
     levelScreen.x = 6
@@ -470,20 +495,42 @@ def check_level_condition():
 
 #Compare the states between character and passage. If alligned within threshold
 #return true else false
+
 def valid_state():
 
 
     #TODO
-    # use CX, XZ or CY in order to toggle  a seconf qubit to be true 
+    # use CX, XZ or CY in order to toggle  a second qubit to be true 
+    # e.g. we can simply use the nature of a quantum bit and use two qbits the first one 
+    # is the working one and the second is the state_validation
+    # we could now alter the first qbit with operations until it has a expectation value of one
+    # to check if the approach was valid and the correct steps have been taken
+    # for example we could extend this with using a puzzle game an d finfing clues.
+    # each found clue rotates the qubit in a given state. Each around it is checked via cx e.g if everything
+    # has been found. This would only flip the second bit (which was prepared in 0 State) if all clues have been found or 
+    # number of steps(n) have been taken
+    #  each operation than applies 2pi/n to get the number of steps needed to actally flip the second bit
+
+    # We can always extend this working example to create more levels extend it using a color
 
     threshold = 0.05
     condition_height = (passage.height-threshold <= player.height <= passage.height+threshold)
     condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
     condition_rotation = (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
 
-    if ( condition_height and condition_width and condition_rotation ):
-        return True
+    progessCircuit = QuantumCircuit(2)
+    
+    #only flips the second qubit to one if the first qubit is 1
+    # The first qubit is only = 1 if every progress has been made
+    progessCircuit.cz(0,1)
 
+    #aaplies z measurement
+    progessCircuit.measure(1,1)
+    res = progessCircuit[1]
+    if ( res == 1 ):
+        if ( condition_height and condition_width and condition_rotation ):
+            return True
+ 
     return False
     
 
