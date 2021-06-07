@@ -86,6 +86,10 @@ public class InputManager : MonoBehaviour
             PressHappened(KeyPress.z);
         }
 
+        if (Input.GetButtonDown("Y")) {
+            PressHappened(KeyPress.y);
+        }
+
 
 
     }

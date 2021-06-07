@@ -158,17 +158,36 @@ public class VisualManager : MonoBehaviour {
 
         //Debug.Log("Generate sprite" + position.ToString());
 
+        //Debug.Log("XXXX " + position.height + " " + position.width);
         CheckDefaultValues(position);
 
         Vector3 pos = new Vector3(position.x, position.y, -position.z);
         Quaternion rot = Quaternion.Euler(0, 0, position.angle);
         float size = position.size;
+        float height = position.height;
+        float width = position.width;
         Vector3 sizeVec = new Vector3(size, size, size);
+
+
+        
+       
 
         SpriteRenderer renderer = Instantiate<SpriteRenderer>(RendererPrefab, pos, rot, this.transform);
 
         renderer.transform.localScale = sizeVec;
-
+        
+        
+        if (height != 1 || width != 1){
+            //
+            Vector3 tempScale = renderer.transform.localScale;
+            tempScale.x += 0.08f;
+            renderer.transform.localScale = tempScale;
+                    
+            Vector3 tempPosition = renderer.transform.position;
+            tempPosition.x += 0.04f;
+            renderer.transform.localPosition = tempPosition;
+            //
+        }
 
         if (UsedSprites.ContainsKey(position.image_id)) {
             renderer.sprite = UsedSprites[position.image_id];

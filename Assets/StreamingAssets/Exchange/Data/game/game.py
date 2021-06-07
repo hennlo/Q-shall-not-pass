@@ -49,7 +49,10 @@ images = qisge.ImageList([
     '../img/walk_l.png',
     '../img/flap_r.png',
     '../img/flap_l.png',
-    '../img/dive.png'])
+    '../img/dive.png',
+    '../img/Smiley.png',
+    '../img/player',
+    '../img/passage_pointer'])
 
 
 #images = qisge.ImageList([
@@ -106,9 +109,45 @@ class Passage():
         self.x, self.y, self.orientation, self.side = self.replace_passage()
         
         # Red Square
-        self.sprite = qisge.Sprite(11, self.x, self.y, size = 2) 
+        self.sprite = qisge.Sprite(11, self.x, self.y, size = 1) 
+        self.pointer = qisge.Sprite(21, self.x, self.y, size = 1) 
         self.z = 1
         self.sprite.z = 0.9
+        self.pointer.z = 1.0
+
+        global qubits
+        
+        
+        d = math.sqrt(pos_x**2+pos_y**2)
+        f = [ s*math.cos(s*d*math.pi/100) for s in seed]
+        tx = (f[0]*pos_x + f[1]*pos_y)*math.pi/7
+        ty = (f[2]*pos_x - f[3]*pos_y)*math.pi/7
+        tz = (f[4]*(pos_x+pos_y) + f[5]*(pos_x-pos_y))*math.pi/7
+
+        theta = math.pi/math.sqrt(2)
+
+        global qubits
+        qubits.qc.rx(tx,0)
+        qubits.qc.rz(tz,0)
+        qubits.qc.ry(ty,0)
+
+        
+
+        qubits.update_tomography()
+
+        passage_properties = qubits.get_bloch(1)
+        self.height = passage_properties.get('X')**2
+        self.width = passage_properties.get('Z')**2
+        self.rotation = passage_properties.get('Y')**2
+
+        #0.5 only for display reasons, the calculations are done using the expectation values
+        self.pointer.size = self.height +0.5
+        self.pointer.height = self.height +0.5
+        self.pointer.width = self.width +0.5
+        self.pointer.angle = self.rotation*360
+
+
+
         
 
 
@@ -172,24 +211,28 @@ class Player():
 
         
 
-        self.height, self.width, self.color = self.generate_character()
+        self.height, self.rotation, self.width,  = self.generate_character()
         
-        self.sprite.size = self.height
+        self.sprite.size = self.height + 0.5
+        self.sprite.height= self.height + 0.5
+        self.sprite.width = self.width + 0.5
+        self.sprite.angle = self.rotation*360
 
     def reposition_character(self):
         self.x, self.y = get_character_start_position()
 
     #### Use Quantum Graph and get_bloch to get the expectation values of <X>, <Y>, <Z>
     # Depending on that distribution we create our character sprite Z for HEIGHT, X for WIDTH and  Y for COLOR       
-    # Since <X>^2, <Y>^2, <Z>^2 <= 1, the character properties are somewhat"proportional" 
+    # Since <X>^2 + <Y>^2 + <Z>^2 <= 1, the character properties are somewhat"proportional" 
     def generate_character(self):
                                                                                                                                                                                                                                                                 
 
-    
-        f = [ s+math.cos(s*math.pi/100) for s in seed ]
-        tx = (f[0] + f[1] )*math.pi/7
-        ty = (f[2] - f[3] )*math.pi/7
-        tz = (f[4] + f[5] )*math.pi/7
+        
+        d = math.sqrt(self.x**2+self.y**2)
+        f = [ s*math.cos(s*d*math.pi/100) for s in seed]
+        tx = (f[0]*self.x + f[1]*self.y)*math.pi/7
+        ty = (f[2]*self.x - f[3]*self.y)*math.pi/7
+        tz = (f[4]*(self.x+self.y) + f[5]*(self.x-self.y))*math.pi/7
 
         theta = math.pi/math.sqrt(2)
 
@@ -198,40 +241,50 @@ class Player():
         qubits.qc.rz(tz,0)
         qubits.qc.ry(ty,0)
 
+        qubits.qc.cz(1,0)
+
+
         qubits.update_tomography()
 
         character_properties = qubits.get_bloch(0)
 
-        return character_properties.get('X'),character_properties.get('Y'),character_properties.get('Z')
+        return character_properties.get('X')**2,character_properties.get('Y')**2,character_properties.get('Z')**2
 
 
     def update_character_proportions(self,gate):
 
         global  qubits
 
+        #adjust theta the higher the level is
+        #to make it more difficult to actually rotate something
+        theta = numpy.pi/4
         if gate == 'X':
             #qubits.qc.x(0)
-            qubits.qc.rx(numpy.pi/4,0)
+            qubits.qc.rx(theta,0)
         if gate == 'Z':
             #qubits.qc.z(0)
-            qubits.qc.rz(numpy.pi/4,0)
+            qubits.qc.rz(theta,0)
+        if gate == 'Y':
+            #qubits.qc.z(0)
+            qubits.qc.ry(theta,0)
         if gate == 'H':
             qubits.qc.h(0)
+
 
         qubits.update_tomography()
         character_properties = qubits.get_bloch(0)
 
-        self.height = character_properties.get('X') **2
-        self.width = character_properties.get('Z') **2
-        self.color = character_properties.get('Y') **2
+        self.height = character_properties.get('X') **2 
+        self.width = character_properties.get('Z') **2 
+        self.rotation = character_properties.get('Y') **2
 
         #Automatically adjusts the size of the character/sprite 
-        self.sprite.size = self.height
-        self.sprite.height = self.height
-        self.sprite.width = self.width
-        #self.sprite.angle = self.color*360
+        self.sprite.size = self.height +0.5
+        self.sprite.height = self.height +0.5
+        self.sprite.width = self.width +0.5
+        self.sprite.angle = self.rotation*360
 
-       
+
         
 
 
@@ -250,9 +303,9 @@ class Player():
         
 
         if self.direction == 1:
-            img = 14
+            img = 20
         if self.direction == 0:
-            img = 15
+            img = 20
 
         new_x = self.x+self.speed*pos_x
         new_y = self.y+self.speed*pos_y
@@ -332,7 +385,7 @@ def initialize_objects():
 
     ## Initialize character and character position
     global player
-    player = Player(14)
+    player = Player(20)
 
     global passage
     passage = Passage(11)
@@ -340,6 +393,11 @@ def initialize_objects():
 
 
 def initialize_game():
+
+    loading.x = 6
+    loading.y = 8
+    loading.set_font_color( (0,0,255) )
+    loading.set_background_color( (255,255,255) )
 
     loading.text = "Creating World"
     loading.width = 16
@@ -363,26 +421,29 @@ def initialize_game():
     
     qisge.update()
 
+    #Start with player health = 10
+    global health
+    health = 2
+
     global current_level
     current_level = 0
     next_level()
 
 
-    #Start with player health = 10
-    global health
-    health = 2
+   
 
 
 
 def next_level():
 
+    global health
     global current_level
     current_level+=1
 
     draw_map()
     initialize_objects()
 
-    levelScreen = qisge.Text('Level: '+str(current_level), 16,2,font_size=22)
+    levelScreen = qisge.Text('Level: '+str(current_level) +"\n\nHealth: "+ str(health), 16,2,font_size=22)
     levelScreen.x = 6
     levelScreen.y = 8
     levelScreen.set_background_color( (168,50,82) )
@@ -407,9 +468,22 @@ def check_level_condition():
 
 
 
-#Compare the states between character and gate. If alligned within threshold
+#Compare the states between character and passage. If alligned within threshold
 #return true else false
 def valid_state():
+
+
+    #TODO
+    # use CX, XZ or CY in order to toggle  a seconf qubit to be true 
+
+    threshold = 0.05
+    condition_height = (passage.height-threshold <= player.height <= passage.height+threshold)
+    condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
+    condition_rotation = (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
+
+    if ( condition_height and condition_width and condition_rotation ):
+        return True
+
     return False
     
 
@@ -429,6 +503,9 @@ def restart_level():
 
 def game_over():
     #END GAME
+
+    loading.width = 0
+
     game_over = qisge.Text('GAME OVER', 16,2,font_size=22)
     game_over.x = 6
     game_over.y = 8
@@ -438,7 +515,7 @@ def game_over():
     time.sleep(2)
     restart_timer = 10
     while restart_timer >= 0:
-        game_over.text = 'GAME OVER\n\nRestart in: ' + str(restart_timer) + 'seconds'
+        game_over.text = 'GAME OVER\n\nRestart in: ' + str(restart_timer) + 'sec'
         qisge.update()
         time.sleep(1)
         restart_timer -= 1
@@ -474,7 +551,7 @@ def toggle_textbox():
     global loading_visible
     if loading.width == 0:
         loading.width = 6
-        loading.height = 5
+        loading.height = 8
         loading_visible = True
     else:
         loading.width = 0
@@ -534,6 +611,10 @@ def next_frame(input):
         pressed=True
         gate = 'H'
 
+    if 12 in input['key_presses']:
+        pressed=True
+        gate = 'Y'
+
     
 
     if pressed:
@@ -543,12 +624,13 @@ def next_frame(input):
         global loading_visible
         global health
         if loading_visible:
-            loading.text = "HEIGHT: " + str(player.height)
+            loading.text = "Player\nHEIGHT: " + str(player.height)
             loading.text += "\nWIDTH: " + str(player.width)
-            loading.text += "\nCOLOR: " + str(player.color)
+            loading.text += "\nROTATION: " + str(player.rotation)
             loading.text += "\n\nApplied gate: " + gate
-            loading.text += "\nPlayer:  " + str(player.x) + " " + str(player.y)
-            loading.text += "\nPassage:  " + str(passage.x) + " " + str(passage.y)
+            loading.text += "\nPassage\nHEIGHT: " + str(passage.height)
+            loading.text += "\nWIDTH: " + str(passage.width)
+            loading.text += "\nROTATION: " + str(passage.rotation)   
             loading.text += "\nHealth:  " + str(health) 
 
     

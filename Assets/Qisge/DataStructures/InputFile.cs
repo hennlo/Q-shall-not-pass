@@ -30,7 +30,8 @@ public enum KeyPress {
     submit, //return button
     x,
     z,
-    h
+    h,
+    y
 }
 
 [System.Serializable]
