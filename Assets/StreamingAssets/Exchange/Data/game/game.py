@@ -80,7 +80,22 @@ def collide(new_x,new_y):
         if collision_map[(int)(new_y+yy)][(int)(new_x+xx)]:
             return True
 
-    #TODO screen border should collide ONLY gate should be passthrough
+    return False
+
+# determines whether there is a collision with a snack when the player is at a given position
+def consumed_snack(new_x,new_y):
+    
+    
+    global snack_map
+    #check if new coordinates are within blocked pixel
+    eps = 0.3
+    global snacks
+    
+    for xx,yy in [(eps,eps),(eps,1-eps),(1-eps,eps),(1-eps,1-eps)]:
+            tempSnack = snack_map[(int)(new_y+yy)][(int)(new_x+xx)] 
+            if tempSnack != -1:
+                snacks[tempSnack].sprite.size = 0
+                return True
 
     return False
 
@@ -98,20 +113,28 @@ def get_character_start_position():
     return x,y
 
 
+snacks = []
+
 class Snack():
 
-    def __init__(self):
+    def __init__(self,id):
         self.x,self.y = get_character_start_position()
         self.sprite = qisge.Sprite(19, self.x, self.y, z=0.9,size = 0.5) 
+        self.id = id
+        snack_map[self.y][self.x] = id
 
 #number of snacks are level progress
 def draw_snacks():
 
     #draw snacks based on current_level
     global current_level
-    snacks = [current_level]
-    for i in range (0,current_level):
-        snacks[i] = Snack()
+    global snacks
+
+    #empty snacks
+    snacks = []
+    for id in range (0,current_level):
+        snacks.append(Snack(id))
+        
             
             
 
@@ -339,6 +362,8 @@ class Player():
         if not collide(self.x,new_y):
             self.y = new_y
 
+        consumed_snack(new_x, new_y)
+
          ## If character left screen check level conditions reload or next level
         if ( new_x >= Lx-1 or new_x <= 0 or new_y >= Ly-1 or new_y <= 0):
             check_level_condition()
@@ -367,6 +392,7 @@ pos_y = 0
 sprite = {}
 
 collision_map =  [[False for _ in range(28)] for _ in range(16)] 
+snack_map =  [[-1 for _ in range(28)] for _ in range(16)] 
 
 
 def draw_map():
@@ -447,7 +473,7 @@ def initialize_game():
 
     #Start with player health = 10
     global health
-    health = 2
+    health = 10
 
     global current_level
     current_level = 0
@@ -518,18 +544,19 @@ def valid_state():
     condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
     condition_rotation = (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
 
-    progessCircuit = QuantumCircuit(2)
+    #progessCircuit = QuantumCircuit(2)
     
     #only flips the second qubit to one if the first qubit is 1
     # The first qubit is only = 1 if every progress has been made
-    progessCircuit.cz(0,1)
+    #progessCircuit.cz(0,1)
 
     #aaplies z measurement
-    progessCircuit.measure(1,1)
-    res = progessCircuit[1]
-    if ( res == 1 ):
-        if ( condition_height and condition_width and condition_rotation ):
-            return True
+    #progessCircuit.measure(1,1)
+    #res = progessCircuit[1]
+    #res = 1
+    #if ( res == 1 ):
+    if ( condition_height and condition_width and condition_rotation ):
+        return True
  
     return False
     
@@ -671,14 +698,19 @@ def next_frame(input):
         global loading_visible
         global health
         if loading_visible:
-            loading.text = "Player\nHEIGHT: " + str(player.height)
-            loading.text += "\nWIDTH: " + str(player.width)
-            loading.text += "\nROTATION: " + str(player.rotation)
-            loading.text += "\n\nApplied gate: " + gate
-            loading.text += "\nPassage\nHEIGHT: " + str(passage.height)
-            loading.text += "\nWIDTH: " + str(passage.width)
-            loading.text += "\nROTATION: " + str(passage.rotation)   
-            loading.text += "\nHealth:  " + str(health) 
+            #loading.text = "Player\nHEIGHT: " + str(player.height)
+            #loading.text += "\nWIDTH: " + str(player.width)
+            #loading.text += "\nROTATION: " + str(player.rotation)
+            #loading.text += "\n\nApplied gate: " + gate
+            #loading.text += "\nPassage\nHEIGHT: " + str(passage.height)
+            #loading.text += "\nWIDTH: " + str(passage.width)
+            #loading.text += "\nROTATION: " + str(passage.rotation)   
+            #loading.text += "\nHealth:  " + str(health) 
+            
+            loading.text = "Player: "+ str(player.x) + " " + str(player.y)
+            global snacks
+            for snack in snacks:
+                loading.text +=  "\n" + str(snack.id) + ": "+ str(snack.x) + " " + str(snack.y)
 
     
     
