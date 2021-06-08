@@ -10,7 +10,7 @@ The tricky part is that you have to do several tasks before you can actually pas
 When the game starts your character is randomly placed on the map and since you shouldn't go unprepared on such an adventure, you need to [modify](#player-modification) your characters proportions and appearance to match the characteristics of the gate of this level
 as well as eating all available snacks along the way to be energized for future tasks to come.
 
-If you do not fulfil these tasks when passing through the gate, you'll lose `health` and the level is [restarted](level-restart)
+If you do not fulfil these tasks when passing through the gate, you'll lose `health` and the level is [restarted](#level-restart)
 Relocating yourself, the gate and the snacks.
 
 
