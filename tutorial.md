@@ -64,11 +64,13 @@ You can simply restars the game and sacrifce a little bit of your `health`
 ## Game Elements
 
 ### Gate/Passage
-The gate is the core of the game and essentially defines the propotions and characteristics a player has to fulfil in order to successully proceed to the next level. 
+The gate is the core of the game and essentially defines the propotions and characteristics a player has to fulfil in order to successully proceed to the next level.
+The gate itself is a red block letting the player exit the level window. This red gate is always accompanied by a simply shaped pointer mimicing the characteristics and proportions of the gate, the player has to mimic in order to reach the next level. 
 
 ### Level restart
 The Level restart can either be a punishment because you did not sufficiently prepared or becuase you got stuck and manually restarted the level.
 Either way the Level restart option will consume `health` and will inevitably lead to [Game Over](game-over) 
+
 
 ### Player Proportions
 
