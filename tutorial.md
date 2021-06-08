@@ -43,14 +43,16 @@ The player (link to image) can move using the `arrow keys` or `W`, `A`, `S` & `D
 
 ### Player Modifciation
 
-* X
-* Z
-* Y
-* H
+* **X** - Slowly adapts your size 
+* **Z** - 
+* **Y** - 
+* **H** - Switch appearance 
 
-* (optional) SPACE -  Toggles a debug console which should help you numerically aiming to allign yourself with the passage.
-* (optional) RETURN - If you are stuck or the wondeful level generation, wasn't so wonderful after all and blocked the player from entering the passage
+* *(optional) SPACE* -  Toggles a debug console which should help you numerically aiming to allign yourself with the passage.
+* *(optional) RETURN* - If you are stuck or the wondeful level generation, wasn't so wonderful after all and blocked the player from entering the passage
 You can simply restars the game and sacrifce a little bit of your `health`
+
+Take care when using  X,Z,Y;H they will affect all other proportions of the player
 
 
 
