@@ -85,16 +85,28 @@ def collide(new_x,new_y):
 # determines whether there is a collision with a snack when the player is at a given position
 def consumed_snack(new_x,new_y):
     
-    
     global snack_map
+    global progessCircuit
     #check if new coordinates are within blocked pixel
-    eps = 0.3
+    eps = 0.2
     global snacks
     
+    # the progess is automatically adjusted by theta dependening on the current level,
+    # for every new level you need more snakcs in order to fully rotate to get a 1
+    theta = numpy.pi/current_level
+    
+
     for xx,yy in [(eps,eps),(eps,1-eps),(1-eps,eps),(1-eps,1-eps)]:
             tempSnack = snack_map[(int)(new_y+yy)][(int)(new_x+xx)] 
             if tempSnack != -1:
                 snacks[tempSnack].sprite.size = 0
+
+                # essentially a progress bar, which manipulates a qubit by theta, theta in that sense is
+                # dependent on the level count. SO in order to flip a |0> state into a |1> state you need to rotaet the z bases by pi
+                # if you want to do this in a dynamic number of steps, e.g. by a number of snacks to eat.
+                # we construct theta as pi/number of snacks avalible and apply a rotation each time  a snack is consumed
+                # In the same sense we could also construct a negative theta that rotates  back if you did something that was not intended 
+                progessCircuit.rx(theta, 0)
                 return True
 
     return False
@@ -113,6 +125,7 @@ def get_character_start_position():
     return x,y
 
 
+
 snacks = []
 
 class Snack():
@@ -129,6 +142,10 @@ def draw_snacks():
     #draw snacks based on current_level
     global current_level
     global snacks
+    global progessCircuit
+
+    #reset progress both qubits will be in state |0>
+    progessCircuit = QuantumCircuit(2,2)
 
     #empty snacks
     snacks = []
@@ -171,7 +188,6 @@ class Passage():
         ty = (f[2]*pos_x - f[3]*pos_y)*math.pi/2
         tz = (f[4]*(pos_x+pos_y) + f[5]*(pos_x-pos_y))*math.pi/2
 
-        theta = math.pi/math.sqrt(2)
 
         global qubits
         qubits.qc.rx(tx,1)
@@ -195,7 +211,6 @@ class Passage():
 
 
 
-        
 
 
     def replace_passage(self):
@@ -493,6 +508,7 @@ def next_level():
     draw_map()
     initialize_objects()
     draw_snacks()
+    
 
     levelScreen = qisge.Text('Level: '+str(current_level) +"\n\nHealth: "+ str(health), 16,2,font_size=22)
     levelScreen.x = 6
@@ -539,24 +555,31 @@ def valid_state():
 
     # We can always extend this working example to create more levels extend it using a color
 
-    threshold = 0.05
-    condition_height = (passage.height-threshold <= player.height <= passage.height+threshold)
-    condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
-    condition_rotation = (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
+    # WIdth is disabled because it has no visual representation and is therefor not needed
 
-    #progessCircuit = QuantumCircuit(2)
+    threshold = 0.07
+    condition_height =  (passage.height-threshold <= player.height <= passage.height+threshold)
+    condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
+    condition_rotation =  (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
+
+    global progessCircuit
     
     #only flips the second qubit to one if the first qubit is 1
     # The first qubit is only = 1 if every progress has been made
-    #progessCircuit.cz(0,1)
+    progessCircuit.cx(0,1)
+    progessCircuit.measure(0,0)
+    progessCircuit.measure(1,1)
+    
 
-    #aaplies z measurement
-    #progessCircuit.measure(1,1)
-    #res = progessCircuit[1]
-    #res = 1
-    #if ( res == 1 ):
-    if ( condition_height and condition_width and condition_rotation ):
-        return True
+    result = simulate(progessCircuit,shots=1,get='memory')[0]
+    
+
+    #is only set to '11' if the first qubit is = '_1' that is the case if all snacks have been collected
+    # because then the CNOT gate applies a not to the second bit and also turns it to 1 leaving the 
+    # 2qubit at '11'
+    if ( result == '11' ):
+        if ( condition_height and condition_width and condition_rotation ):
+            return True
  
     return False
     
@@ -626,6 +649,10 @@ def toggle_textbox():
     if loading.width == 0:
         loading.width = 6
         loading.height = 8
+        loading.x = 6
+        loading.y = 8
+        loading.set_font_color( (0,0,255) )
+
         loading_visible = True
     else:
         loading.width = 0
@@ -695,34 +722,16 @@ def next_frame(input):
 
         player.update(dir_x,dir_y,gate)
         
-        global loading_visible
-        global health
         if loading_visible:
-            #loading.text = "Player\nHEIGHT: " + str(player.height)
-            #loading.text += "\nWIDTH: " + str(player.width)
-            #loading.text += "\nROTATION: " + str(player.rotation)
-            #loading.text += "\n\nApplied gate: " + gate
-            #loading.text += "\nPassage\nHEIGHT: " + str(passage.height)
-            #loading.text += "\nWIDTH: " + str(passage.width)
-            #loading.text += "\nROTATION: " + str(passage.rotation)   
-            #loading.text += "\nHealth:  " + str(health) 
-            
-            loading.text = "Player: "+ str(player.x) + " " + str(player.y)
-            global snacks
-            for snack in snacks:
-                loading.text +=  "\n" + str(snack.id) + ": "+ str(snack.x) + " " + str(snack.y)
-
-    
-    
-        # Redraw tiles
-        #for dx in range(28):
-        #    for dy in range(16):
-                #sprite[dx,dy].image_id = get_image_id(pos_x+dx, pos_y+dy)
-                #sprite[dx,dy].image_id = sprite[dx,dy].image_id
-
-
-            
-        
+            loading.text = "Player\nHEIGHT: " + str(player.height)
+            loading.text += "\nWIDTH: " + str(player.width)
+            loading.text += "\nROTATION: " + str(player.rotation)
+            loading.text += "\n\nApplied gate: " + gate
+            loading.text += "\nPassage\nHEIGHT: " + str(passage.height)
+            loading.text += "\nWIDTH: " + str(passage.width)
+            loading.text += "\nROTATION: " + str(passage.rotation)   
+            loading.text += "\n\nHealth:  " + str(health) 
+                    
         
 
 
