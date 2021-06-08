@@ -69,7 +69,7 @@ The gate itself is a red block letting the player exit the level window. This re
 
 ### Level restart
 The Level restart can either be a punishment because you did not sufficiently prepared or becuase you got stuck and manually restarted the level.
-Either way the Level restart option will consume `health` and will inevitably lead to [Game Over](game-over) 
+Either way the Level restart option will consume `health` and will inevitably lead to [Game Over](#game-over) 
 
 
 ### Player Proportions
@@ -82,13 +82,13 @@ The proportions available are:
 * **ROTATION** - 
 
 Although three are aailable only HEIGHT and ROTATION are actually currently considered to compare your state with the levels gate.
-You can adjust these by applying several [modifications](player-modifications)
+You can adjust these by applying several [modifications](#player-modifications)
 
 ### Snacks
 Snacks are Smiley-shaped edibles the player has to consume before approaching a gate.
 
 So even if you managed to align yourself with the proportions of the gate but left some edibles behind 
-the game will still cause the level to be [restarted](level-restart), because not all conditions werefulfilled.
+the game will still cause the level to be [restarted](#level-restart), because not all conditions werefulfilled.
 
 ### Obstacles 
 Although being a mighty `black arrow head`, you unfortunately can't pass through trees and the brick walls at the border of the screen.
