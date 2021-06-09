@@ -7,7 +7,7 @@ If you want to play this game please head to the download section and take a loo
 ## About
 The purpose of the game is two fold.
 For one I would like to give an example and teach others on a very basic level how quantum information works.
-Secondly I want to use the nature and properties of qubits to implement several [game mechanics](link to mechanics) using Quantum Computing.
+Secondly I want to use the nature and properties of qubits to implement several game mechanics using Quantum Computing.
 
 For an in-depth explanation what the vision of this game is and how the specifc mechanics are implemented please read the full [project report]().
 
@@ -30,6 +30,17 @@ If you want to make adaptations to the code and play around with the game and me
 and add it to your Qisge
 
 You can of course also look at the [game](Assets/StreamingAssets/Exchange/Data/game/game.py) itself, to get inspiration and see the magic behind everything.
+
+## Game Mechanics
+
+The game essentially revolves around three game mechanics, which
+Use Quantum Computing.
+
+1. A procedural level and map generation
+2. Proportional character generation using the natural constraints of qubits and their expectation values
+3. Matching player and gate proportions by comparing expectation values of player qubit and  passage qubit
+4. Level progression: Forcing the user to execute a specific number of tasks in order to reach a certain level progress while internally applying rotation gates to achieve the desired target state
+
 
 ### Credits
 This game was done with the help of:
