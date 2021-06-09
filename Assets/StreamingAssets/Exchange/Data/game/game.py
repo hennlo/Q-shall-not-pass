@@ -268,7 +268,7 @@ class Player():
         self.sprite = qisge.Sprite(img, self.x, self.y,size = 1) 
         self.z = 0
         self.sprite.z = 1
-        self.speed = speed
+        self.speed = speed 
         self.direction = 1
 
         
@@ -296,7 +296,6 @@ class Player():
         ty = (f[2]*self.x - f[3]*self.y)*math.pi/7
         tz = (f[4]*(self.x+self.y) + f[5]*(self.x-self.y))*math.pi/7
 
-        theta = math.pi/math.sqrt(2)
 
         global qubits
         qubits.qc.rx(tx,0)
@@ -319,7 +318,7 @@ class Player():
 
         #adjust theta the higher the level is
         #to make it more difficult to actually rotate something
-        theta = numpy.pi/4
+        theta = (2*numpy.pi)/8
         if gate == 'X':
             #qubits.qc.x(0)
             qubits.qc.rx(theta,0)
@@ -557,7 +556,7 @@ def valid_state():
 
     # WIdth is disabled because it has no visual representation and is therefor not needed
 
-    threshold = 0.07
+    threshold = 0.1
     condition_height =  (passage.height-threshold <= player.height <= passage.height+threshold)
     condition_width = True #(passage.width-threshold <= player.width <= passage.width+threshold)
     condition_rotation =  (passage.rotation-threshold <= player.rotation <= passage.rotation+threshold)
@@ -580,6 +579,9 @@ def valid_state():
     if ( result == '11' ):
         if ( condition_height and condition_width and condition_rotation ):
             return True
+
+    #To make the game easier we could start by generating the passage first and then rotating 
+    # it a few time to generate the player in order to guarantee that the game stays solvable
  
     return False
     
