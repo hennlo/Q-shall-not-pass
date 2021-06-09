@@ -13,8 +13,7 @@ For an in-depth explanation what the vision of this game is and how the specifc 
 
 Although this games shall serve as an explanation on qubits, their states and how they behave when altered, this project does not teach you all the basics around quantum computing. It rather aims to visually show you how qubits can be "altered" and manipulated while discovering that the first impression of randomness isn't so random after all.
 
-If you want to gain an in-depth view on quantum computing and the characteristics of qubits, please consult the [Qiskit Textbook]() which already gives a
-perfect introduction to the topic with great hands-on examples to try quantum computing for yourself.
+If you want to gain an in-depth view on quantum computing and the characteristics of qubits, please consult the [Qiskit Textbook](https://qiskit.org/textbook/preface.html) which already gives a perfect intorduction and overall explanation of the topic with great hands-on examples to try quantum computing for yourself.
 
 ## Playing
 
