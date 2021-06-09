@@ -15,6 +15,10 @@ Although this games shall serve as an explanation on qubits, their states and ho
 
 If you want to gain an in-depth view on quantum computing and the characteristics of qubits, please consult the [Qiskit Textbook](https://qiskit.org/textbook/preface.html) which already gives a perfect intorduction and overall explanation of the topic with great hands-on examples to try quantum computing for yourself.
 
+The core of the repository is a fork from teh original [Qisge](https://github.com/TigrisCallidus/Qisge) repository.
+Although most of it is used as is, there are a few altercations to the original work.Mainly to change input/output handling for the project-specific use case.
+The main part od the project is still the **[game](Assets/StreamingAssets/Exchange/Data/game/game.py)**
+
 ## Start Playing
 
 Simply download the most current release of the game [here](https://github.com/hennlo/Q-shall-not-pass/releases)
