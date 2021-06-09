@@ -32,3 +32,4 @@ This game was done with the help of:
 *   **[Qisge](https://github.com/TigrisCallidus/Qisge)** a game engine enabling you to play pxthon games in [Unity](https://unity.com/).
 Enabling you to use quantum computing inside your game.
 * **[MicroQiskit](https://github.com/qiskit-community/MicroQiskit)** a simplified version of the feature-rich framework:  [Qiskit](https://qiskit.org/). This framework for quantum computing allows you to create quantum programs and run them either on advanced simulation devices or real prototype quantum devices.
+* **[QuantumGraph](https://github.com/qiskit-community/QuantumGraph)** which helps to make quantum algorithms based on the manipulation of a tomography of a multi qubit device.
