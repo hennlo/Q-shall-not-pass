@@ -17,7 +17,7 @@ If you want to gain an in-depth view on quantum computing and the characteristic
 
 ## Start Playing
 
-Simply download the most current release of the game [here]()
+Simply download the most current release of the game [here](https://github.com/hennlo/Q-shall-not-pass/releases/tag/v0.1)
 since we use Qisge to run and build the game you can simply follow the [installation](https://github.com/TigrisCallidus/Qisge#installation)
 
 ## How to use
