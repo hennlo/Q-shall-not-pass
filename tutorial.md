@@ -86,6 +86,7 @@ You can adjust these by applying several [modifications](#player-modifications)
 
 ### Snacks
 Snacks are Smiley-shaped edibles the player has to consume before approaching a gate.
+![smiley](Assets/StreamingAssetes/Exchange/Data/img)
 
 So even if you managed to align yourself with the proportions of the gate but left some edibles behind 
 the game will still cause the level to be [restarted](#level-restart), because not all conditions werefulfilled.
