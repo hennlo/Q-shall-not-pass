@@ -20,8 +20,7 @@ If you want to gain an in-depth view on quantum computing and the characteristic
 Simply download the most current release of the game [here]()
 since we use Qisge to run and build the game you can simply follow the [installation](https://github.com/TigrisCallidus/Qisge#installation)
 
-#
-# How to use
+## How to use
 
 If you want to make adaptations to the code and play around with the game and mechanics you can simply donwload the repository.
 and add it to your Qisge
