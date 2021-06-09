@@ -67,13 +67,15 @@ You can simply restars the game and sacrifce a little bit of your `health`
 The gate is the core of the game and essentially defines the propotions and characteristics a player has to fulfil in order to successully proceed to the next level.
 The gate itself is a red block letting the player exit the level window. This red gate is always accompanied by a simply shaped pointer mimicing the characteristics and proportions of the gate, the player has to mimic in order to reach the next level. 
 
+![smiley](Assets/StreamingAssets/Exchange/Data/img/passage_pointer.png) 
+
 ### Level restart
 The Level restart can either be a punishment because you did not sufficiently prepared or becuase you got stuck and manually restarted the level.
 Either way the Level restart option will consume `health` and will inevitably lead to [Game Over](#game-over) 
 
 
 ### Player Proportions
-
+![smiley](Assets/StreamingAssets/Exchange/Data/img/player.png) 
 The player proportions are needed in order to match the provided conditions of each levels gate.
 The proportions available are:
 
@@ -87,7 +89,7 @@ You can adjust these by applying several [modifications](#player-modifications)
 ### Snacks
 Snacks are Smiley-shaped edibles the player has to consume before approaching a gate.
 ![smiley](Assets/StreamingAssets/Exchange/Data/img/smiley.png) 
-<img src="https://github.com/hennlo/Q-shall-not-pass/Assets/StreamingAssets/Exchange/Data/img/smiley.png)" width="100" height="100">
+
 
 So even if you managed to align yourself with the proportions of the gate but left some edibles behind 
 the game will still cause the level to be [restarted](#level-restart), because not all conditions werefulfilled.
