@@ -55,15 +55,6 @@ images = qisge.ImageList([
     '../img/passage_pointer'])
 
 
-#images = qisge.ImageList([
-#    '../img/terrain-water.png',
-#    '../img/terrain-red-flower.png',
-#    '../img/terrain-grass.png',
-#    '../img/terrain-path.png',
-#    '../img/terrain-grass.png',
-#    '../img/terrain-purple-flower.png',
-#    '../img/terrain-tree.png',
-#    ])
 
 #terrain_types = len(images)
 terrain_types = 7
@@ -418,7 +409,7 @@ def draw_map():
     for dx in range(28):
         for dy in range(16):
             
-            # artificially place border around screenedge
+            # artificially place border around screen edge
             if ( dx == 0 or dx == 27 or dy == 0 or dy == 15 ):
                 #backrock
                 image_id = 7
@@ -541,16 +532,16 @@ def valid_state():
 
 
     #TODO
-    # use CX, XZ or CY in order to toggle  a second qubit to be true 
+    # use CX, CZ or CY in order to toggle  a second qubit to be true 
     # e.g. we can simply use the nature of a quantum bit and use two qbits the first one 
     # is the working one and the second is the state_validation
     # we could now alter the first qbit with operations until it has a expectation value of one
     # to check if the approach was valid and the correct steps have been taken
     # for example we could extend this with using a puzzle game an d finfing clues.
-    # each found clue rotates the qubit in a given state. Each around it is checked via cx e.g if everything
+    # each found clue rotates the qubit in a given state. Each round it is checked via cz e.g if everything
     # has been found. This would only flip the second bit (which was prepared in 0 State) if all clues have been found or 
     # number of steps(n) have been taken
-    #  each operation than applies 2pi/n to get the number of steps needed to actally flip the second bit
+    #  each operation than applies pi/n to get the number of steps needed to actally flip the second bit
 
     # We can always extend this working example to create more levels extend it using a color
 
