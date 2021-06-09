@@ -17,7 +17,7 @@ If you want to gain an in-depth view on quantum computing and the characteristic
 
 ## Start Playing
 
-Simply download the most current release of the game [here](https://github.com/hennlo/Q-shall-not-pass/releases/tag/v0.1)
+Simply download the most current release of the game [here](https://github.com/hennlo/Q-shall-not-pass/releases)
 since we use Qisge to run and build the game you can simply follow the [installation](https://github.com/TigrisCallidus/Qisge#installation)
 
 ## How to use
@@ -25,7 +25,7 @@ since we use Qisge to run and build the game you can simply follow the [installa
 If you want to make adaptations to the code and play around with the game and mechanics you can simply donwload the repository.
 and add it to your Qisge
 
-You canof course also look at the [game](Assets/StreamingAssets/Exchange/Data/game/game.py) itself, to get inspiration and see the magic behind everything.
+You can of course also look at the [game](Assets/StreamingAssets/Exchange/Data/game/game.py) itself, to get inspiration and see the magic behind everything.
 
 ### Credits
 This game was done with the help of:
