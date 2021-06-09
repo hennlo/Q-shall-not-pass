@@ -33,7 +33,7 @@ You can of course also look at the [game](Assets/StreamingAssets/Exchange/Data/g
 
 ## Game Mechanics
 
-The game essentially revolves around three game mechanics, which
+The game essentially revolves around four game mechanics, which
 Use Quantum Computing.
 
 1. A procedural level and map generation
