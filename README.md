@@ -9,7 +9,7 @@ The purpose of the game is two fold.
 For one I would like to give an example and teach others on a very basic level how quantum information works.
 Secondly I want to use the nature and properties of qubits to implement several game mechanics using Quantum Computing.
 
-For an in-depth explanation what the vision of this game is and how the specifc mechanics are implemented please read the full [project report]().
+For an in-depth explanation what the vision of this game is and how the specifc mechanics are implemented please read the full [project report](https://github.com/hennlo/Q-shall-not-pass/blob/main/final_project_qi_hennemann.pdf).
 
 Although this games shall serve as an explanation on qubits, their states and how they behave when altered, this project does not teach you all the basics around quantum computing. It rather aims to visually show you how qubits can be "altered" and manipulated while discovering that the first impression of randomness isn't so random after all.
 
