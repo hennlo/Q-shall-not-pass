@@ -86,7 +86,8 @@ You can adjust these by applying several [modifications](#player-modifications)
 
 ### Snacks
 Snacks are Smiley-shaped edibles the player has to consume before approaching a gate.
-![smiley](Assets/StreamingAssetes/Exchange/Data/img)
+![smiley](Assets/StreamingAssets/Exchange/Data/img/smiley.png) 
+<img src="https://github.com/hennlo/Q-shall-not-pass/Assets/StreamingAssets/Exchange/Data/img/smiley.png)" width="100" height="100">
 
 So even if you managed to align yourself with the proportions of the gate but left some edibles behind 
 the game will still cause the level to be [restarted](#level-restart), because not all conditions werefulfilled.
