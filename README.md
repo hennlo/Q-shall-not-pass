@@ -15,7 +15,7 @@ Although this games shall serve as an explanation on qubits, their states and ho
 
 If you want to gain an in-depth view on quantum computing and the characteristics of qubits, please consult the [Qiskit Textbook](https://qiskit.org/textbook/preface.html) which already gives a perfect intorduction and overall explanation of the topic with great hands-on examples to try quantum computing for yourself.
 
-## Playing
+## Start Playing
 
 Simply download the most current release of the game [here]()
 since we use Qisge to run and build the game you can simply follow the [installation](https://github.com/TigrisCallidus/Qisge#installation)
@@ -24,6 +24,8 @@ since we use Qisge to run and build the game you can simply follow the [installa
 
 If you want to make adaptations to the code and play around with the game and mechanics you can simply donwload the repository.
 and add it to your Qisge
+
+You canof course also look at the [game](Assets/StreamingAssets/Exchange/Data/game/game.py) itself, to get inspiration and see the magic behind everything.
 
 ### Credits
 This game was done with the help of:
